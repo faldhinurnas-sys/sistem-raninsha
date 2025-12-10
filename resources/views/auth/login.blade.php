@@ -109,7 +109,7 @@
 
 <div class="login-card">
     <div class="header">
-        <img src="{{ asset('products/logo-raninshaa.png') }}" alt="Raninshaa Kitchen" class="logo">
+        <img src="{{ asset('storage/img/logo-raninshaa.jpg') }}" alt="Raninshaa Kitchen" class="logo">
         <h2>Selamat Datang Kembali</h2>
         <p>Sistem Penjualan Kue • Raninshaa Kitchen</p>
     </div>

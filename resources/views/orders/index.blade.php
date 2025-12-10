@@ -56,7 +56,6 @@
 
 <div class="container py-4">
 
-    <!-- Judul + Animasi -->
     <h3 class="page-title mb-3">
         <span class="float-anim" style="font-size: 1.8rem; margin-right: 6px;">📦</span>
         Pesanan Saya
@@ -72,6 +71,13 @@
         </div>
 
     @else
+        @php
+            // Kelompokkan berdasarkan status
+            $processing = $orders->where('status', 'processing');
+            $pending = $orders->where('status', 'pending');
+            $success = $orders->where('status', 'success');
+            $completed = $orders->where('status', 'completed');
+        @endphp
 
         <div class="card custom-card p-0">
             <div class="card-body p-0">
@@ -88,32 +94,21 @@
                     </thead>
 
                     <tbody>
-                        @foreach($orders as $order)
+
+                        <!-- ========================= -->
+                        <!--   1. STATUS PROCESSING    -->
+                        <!-- ========================= -->
+                        @foreach($processing as $order)
                             <tr>
                                 <td class="align-middle">{{ $loop->iteration }}</td>
-
-                                <td class="align-middle fw-bold text-success">
-                                    #{{ $order->id }}
-                                </td>
-
-                                <td class="align-middle">
-                                    {{ $order->created_at->format('d-m-Y H:i') }}
-                                </td>
-
+                                <td class="align-middle fw-bold text-success">#{{ $order->id }}</td>
+                                <td class="align-middle">{{ $order->created_at->format('d-m-Y H:i') }}</td>
                                 <td class="align-middle fw-bold">
                                     Rp {{ number_format($order->total_amount, 0, ',', '.') }}
                                 </td>
-
                                 <td class="align-middle">
-                                    <span class="badge 
-                                        @if($order->status == 'success') bg-success 
-                                        @elseif($order->status == 'pending') bg-warning text-dark 
-                                        @else bg-secondary 
-                                        @endif">
-                                        {{ ucfirst($order->status) }}
-                                    </span>
+                                    <span class="badge bg-secondary">Processing</span>
                                 </td>
-
                                 <td class="text-center align-middle">
                                     <a href="{{ route('orders.show', $order->id) }}" 
                                        class="btn btn-sm btn-primary">
@@ -122,6 +117,55 @@
                                 </td>
                             </tr>
                         @endforeach
+
+
+                        <!-- ========================= -->
+                        <!--       2. STATUS PENDING   -->
+                        <!-- ========================= -->
+                        @foreach($pending as $order)
+                            <tr>
+                                <td class="align-middle">{{ $loop->iteration }}</td>
+                                <td class="align-middle fw-bold text-success">#{{ $order->id }}</td>
+                                <td class="align-middle">{{ $order->created_at->format('d-m-Y H:i') }}</td>
+                                <td class="align-middle fw-bold">
+                                    Rp {{ number_format($order->total_amount, 0, ',', '.') }}
+                                </td>
+                                <td class="align-middle">
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <a href="{{ route('orders.show', $order->id) }}" 
+                                       class="btn btn-sm btn-primary">
+                                        Detail
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+
+
+                        <!-- ========================= -->
+                        <!--   3. SUCCESS & COMPLETED  -->
+                        <!-- ========================= -->
+                        @foreach($success->merge($completed) as $order)
+                            <tr>
+                                <td class="align-middle">{{ $loop->iteration }}</td>
+                                <td class="align-middle fw-bold text-success">#{{ $order->id }}</td>
+                                <td class="align-middle">{{ $order->created_at->format('d-m-Y H:i') }}</td>
+                                <td class="align-middle fw-bold">
+                                    Rp {{ number_format($order->total_amount, 0, ',', '.') }}
+                                </td>
+                                <td class="align-middle">
+                                    <span class="badge bg-success">Completed</span>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <a href="{{ route('orders.show', $order->id) }}" 
+                                       class="btn btn-sm btn-primary">
+                                        Detail
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+
                     </tbody>
                 </table>
             </div>
